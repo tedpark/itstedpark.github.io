@@ -37,8 +37,8 @@
 		</h1>
 
 		<p class="text-foreground/60 text-lg leading-relaxed max-w-xl mb-10">
-			Quantitative trading systems, from strategy research to IBKR live execution.<br />
-			32 active stat-arb pairs · OOS Sharpe 3.716 · Built and operated solo.
+			ML-powered stat-arb — HMM regime classification, SAC RL sizing, ensemble signals.<br />
+			32 active pairs on IBKR · OOS Sharpe 3.716 · Built and operated solo.
 		</p>
 
 		<!-- Stats strip -->
@@ -49,7 +49,7 @@
 			<span class="text-border/80">·</span>
 			<span>OOS Sharpe 3.716</span>
 			<span class="text-border/80">·</span>
-			<span>Python · Rust · SvelteKit</span>
+			<span>HMM + SAC RL · Ensemble + TFT</span>
 		</div>
 	</section>
 
