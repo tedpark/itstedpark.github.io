@@ -28,17 +28,17 @@
 	<section class="max-w-5xl mx-auto px-6 pt-40 pb-20">
 
 		<p class="text-[11px] font-mono text-muted-foreground tracking-[0.3em] uppercase mb-6">
-			AI Engineer · Quant Developer
+			Quant Developer · AI Engineer
 		</p>
 
 		<h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.05] mb-6">
-			Production-grade AI,<br />
-			<span class="text-foreground/35">end-to-end.</span>
+			Alpha Research<br />
+			<span class="text-foreground/35">to Live Execution.</span>
 		</h1>
 
 		<p class="text-foreground/60 text-lg leading-relaxed max-w-xl mb-10">
-			Strategy design → model training → backtesting → live execution → monitoring.<br />
-			Every stage, built and operated solo.
+			Quantitative trading systems, from strategy research to IBKR live execution.<br />
+			32 active stat-arb pairs · OOS Sharpe 3.716 · Built and operated solo.
 		</p>
 
 		<!-- Stats strip -->
@@ -60,7 +60,7 @@
 			<div class="max-w-5xl mx-auto px-6">
 				<div class="flex items-center gap-4 py-7 border-t border-white/[0.1]">
 					<span class="text-[10px] font-mono text-muted-foreground/50 tracking-[0.35em] uppercase whitespace-nowrap">
-						Project {['01', '02', '03'][i]}
+						{['01 — Live System', '02 — Side Project', '03 — Side Project'][i]}
 					</span>
 					<div class="h-px flex-1 bg-white/[0.06]"></div>
 				</div>
