@@ -28,15 +28,15 @@ export const projects: Project[] = [
 		subtitle: 'SAC RL-based Statistical Arbitrage Trading System',
 		period: '2022 – Present',
 		description:
-			'Built and operated the full cycle solo — from StatArb strategy design and AI model training, through backtesting, live execution, and real-time monitoring. Screened 124,750 pair combinations with an 8-stage filter pipeline and deployed the top 32 pairs live on IBKR.',
+			'A full-stack algorithmic trading system designed, built, and operated solo — from strategy research through live execution on IBKR. The central problem with most pair trading systems is regime dependency: strategies calibrated in trending markets collapse during mean-reverting periods. This system addresses it by combining HMM-based regime classification with SAC reinforcement learning for adaptive position sizing — the HMM detects market state in real time and routes signals to the appropriate strategy branch, while the SAC agent learns an entropy-maximizing policy that naturally shrinks exposure when signal confidence is low. The data pipeline ingests from FRED, yfinance, and Alpha Vantage into a DuckDB-backed feature store, drives an XGBoost / LightGBM / CatBoost ensemble plus a PyTorch TFT model for signal generation, and submits live orders to IBKR via ib-async. A Rust TUI and a Tauri 2 dekstop dashboard provide real-time visibility into signals, P&L, and position state.',
 		highlights: [
-			'OOS Sharpe 3.716 · Ann. Return +71.5% vs SPY +11.7%',
-			'HMM regime classification → strategy branching for stable performance across regime transitions',
-			'SAC RL position sizing — entropy-maximizing objective for exploration-exploitation balance',
-			'XGBoost + LightGBM + CatBoost ensemble, Optuna hyperparameter optimization',
-			'FastAPI + DuckDB + MongoDB + Redis multi-DB architecture',
-			'IBKR ib-async integration, Gateway in Docker with autoheal auto-recovery',
-			'Tauri 2 desktop dashboard + Rust TUI monitoring tool — both built in-house'
+			'OOS Sharpe 3.716 · Ann. Return +71.5% vs SPY benchmark +11.7%',
+			'HMM regime classifier feeds a strategy router — different signal logic per regime state',
+			'SAC RL position sizing: entropy-maximizing objective balances exploration vs exploitation',
+			'XGBoost + LightGBM + CatBoost ensemble with Optuna sweep; PyTorch TFT for sequence prediction',
+			'FastAPI service + DuckDB feature store + MongoDB ODM + Redis cache — purpose-fit per layer',
+			'IBKR ib-async bidirectional integration; Gateway containerized with autoheal auto-recovery',
+			'Rust TUI (Ratatui + Tokio) for terminal monitoring; Tauri 2 + SvelteKit desktop dashboard'
 		],
 		tags: [
 			'Python', 'PyTorch', 'SAC RL', 'HMM', 'XGBoost', 'LightGBM', 'CatBoost',
@@ -59,12 +59,14 @@ export const projects: Project[] = [
 		subtitle: 'LLM-powered PDF Translation Desktop App',
 		period: '2023',
 		description:
-			'A Tauri 2 native app that translates technical books paragraph by paragraph. Attempted direct fine-tuning with T5 and fairseq — abandoned after Korean data shortage caused token noise — then rebuilt on Claude API. Ships with 30+ language support and an SSE-streamed Ask AI panel.',
+			'A Tauri 2 native desktop app for reading English technical books in your native language, paragraph by paragraph. The original approach attempted to fine-tune T5 and fairseq models directly on Korean–English pairs — this was abandoned when the Korean training corpus proved too thin, producing token-level noise instead of coherent output. The architecture was rebuilt around Claude Haiku via the Anthropic API, with the Rust backend handling all network I/O through reqwest, while pdfjs-dist on the SvelteKit frontend extracts and segments paragraph-level text blocks from PDF files. An SSE-streamed Ask AI panel lets users ask questions mid-read, injecting the current page text as context so answers are always relevant to what\'s on screen.',
 		highlights: [
-			'Paragraph-level PDF text extraction via pdfjs-dist',
-			'Rust backend calls Claude Haiku API → 30+ language output',
-			'SSE streaming for page-context-aware Ask AI',
-			'Honest failure: T5/fairseq fine-tune attempt failed → insufficient Korean data → pivoted to Claude API'
+			'pdfjs-dist parses PDF structure and extracts text at paragraph granularity',
+			'Rust backend (reqwest + tokio) calls Claude Haiku API with async concurrency',
+			'30+ language support — translation target is user-configurable at runtime',
+			'SSE streaming delivers Ask AI responses token-by-token for low-latency feel',
+			'Failure-driven pivot: T5/fairseq fine-tune failed → insufficient Korean data → Claude API',
+			'Fully offline-capable except for API calls; no server, no account required beyond API key'
 		],
 		tags: ['Tauri 2', 'Rust', 'SvelteKit', 'TailwindCSS', 'Claude API', 'reqwest', 'tokio', 'pdfjs-dist'],
 		metrics: [
@@ -83,12 +85,14 @@ export const projects: Project[] = [
 		subtitle: 'Goal Management Desktop App with Built-in AI Coach',
 		period: '2024',
 		description:
-			'A Tauri 2 desktop app that unifies Mandala Chart, GTD, and Pomodoro into a single workflow. Visualizes goal hierarchy with a 3D depth UI and delivers execution guidance through an Ask AI feature that injects the current goal context into the prompt.',
+			'A Tauri 2 desktop app that replaces three separate productivity tools — Mandala Chart, GTD, and Pomodoro — with one coherent workflow. The Mandala Chart gives goals a spatial structure: each outer cell expands into its own 3×3 action plan, with a drill-down navigator that moves through hierarchy levels. GTD state management runs as an explicit state machine in Rust, tracking items across Inbox → Next Actions → Waiting → Done with enforced transitions. Pomodoro sessions drive the focus cycle and write session data to DuckDB through the Rust backend, keeping everything local-first with no cloud dependency. An Ask AI feature injects the current goal and its context into a configurable LLM prompt — supporting OpenAI, Anthropic, Gemini, and Groq — and streams the coaching response back via SSE.',
 		highlights: [
-			'Tauri 2 Rust backend — DuckDB persistence, Pomodoro state management',
-			'Multi-provider: OpenAI · Anthropic · Gemini · Groq — user-selectable at runtime',
-			'SSE-streamed Ask AI with a GTD expert system prompt',
-			'Multi Mandala Chart support, GTD state machine, drill-down navigation'
+			'3-in-1 workflow: Mandala Chart spatial hierarchy + GTD state machine + Pomodoro timer',
+			'Rust state machine enforces GTD transitions — no invalid state changes possible',
+			'Drill-down navigation: click any cell to expand its own 3×3 Mandala sub-plan',
+			'DuckDB via Rust backend — all data stays local, zero cloud dependency',
+			'Multi-provider AI: OpenAI · Anthropic · Gemini · Groq — user-selectable at runtime',
+			'SSE-streamed Ask AI with goal context injection and GTD expert system prompt'
 		],
 		tags: ['Tauri 2', 'Rust', 'SvelteKit', 'TailwindCSS', 'DuckDB', 'OpenAI', 'Claude', 'Gemini', 'Groq'],
 		metrics: [

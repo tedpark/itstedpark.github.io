@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Project } from '$lib/data/projects';
+	import { techIconPaths } from '$lib/utils/techIcons';
 
 	let { project, index }: { project: Project; index: number } = $props();
 
@@ -124,7 +125,13 @@
 	<!-- ⑥ Stack -->
 	<div class="flex flex-wrap gap-1.5 pt-3 border-t border-white/[0.07]">
 		{#each project.tags as tag}
-			<span class="text-[11px] font-mono px-2.5 py-[5px] rounded-md bg-white/[0.05] border border-white/[0.07] text-foreground/55 hover:text-foreground/80 hover:bg-white/[0.09] transition-colors cursor-default">
+			{@const iconPath = techIconPaths[tag]}
+			<span class="inline-flex items-center gap-1.5 text-[11px] font-mono px-2.5 py-[5px] rounded-md bg-white/[0.05] border border-white/[0.07] text-foreground/55 hover:text-foreground/80 hover:bg-white/[0.09] transition-colors cursor-default">
+				{#if iconPath}
+					<svg viewBox="0 0 24 24" class="w-3 h-3 flex-none opacity-70" fill="currentColor" aria-hidden="true">
+						<path d={iconPath} />
+					</svg>
+				{/if}
 				{tag}
 			</span>
 		{/each}
