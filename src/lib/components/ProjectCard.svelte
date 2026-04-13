@@ -1,24 +1,14 @@
 <script lang="ts">
 	import type { Project } from '$lib/data/projects';
-	import { Badge } from '$lib/components/ui/badge/index.js';
-	import { Card, CardContent, CardHeader } from '$lib/components/ui/card/index.js';
 
-	let { project }: { project: Project } = $props();
+	let { project, index }: { project: Project; index: number } = $props();
 
-	let currentIndex = $state(0);
+	let activeIndex = $state(0);
 	let lightboxOpen = $state(false);
 	let lightboxIndex = $state(0);
 
-	function prev() {
-		currentIndex = (currentIndex - 1 + project.screenshots.length) % project.screenshots.length;
-	}
-
-	function next() {
-		currentIndex = (currentIndex + 1) % project.screenshots.length;
-	}
-
-	function openLightbox(i: number) {
-		lightboxIndex = i;
+	function openLightbox(idx: number) {
+		lightboxIndex = idx;
 		lightboxOpen = true;
 	}
 
@@ -26,178 +16,184 @@
 		lightboxOpen = false;
 	}
 
-	function lightboxPrev() {
+	function prev() {
 		lightboxIndex = (lightboxIndex - 1 + project.screenshots.length) % project.screenshots.length;
 	}
 
-	function lightboxNext() {
+	function next() {
 		lightboxIndex = (lightboxIndex + 1) % project.screenshots.length;
 	}
 
-	function onKeydown(e: KeyboardEvent) {
+	function handleKey(e: KeyboardEvent) {
 		if (!lightboxOpen) return;
 		if (e.key === 'Escape') closeLightbox();
-		if (e.key === 'ArrowLeft') lightboxPrev();
-		if (e.key === 'ArrowRight') lightboxNext();
+		if (e.key === 'ArrowLeft') prev();
+		if (e.key === 'ArrowRight') next();
 	}
+
+	const numberLabel = ['01', '02', '03'][index] ?? String(index + 1).padStart(2, '0');
 </script>
 
-<svelte:window onkeydown={onKeydown} />
+<svelte:window onkeydown={handleKey} />
 
-<Card class="overflow-hidden">
-	<div class="grid gap-0 lg:grid-cols-[1fr_400px]">
-		<!-- Screenshot carousel -->
-		<div class="relative bg-zinc-950 aspect-[16/10] lg:aspect-auto min-h-[240px]">
-			{#each project.screenshots as ss, i}
-				<button
-					class="absolute inset-0 h-full w-full cursor-zoom-in transition-opacity duration-300"
-					class:opacity-100={i === currentIndex}
-					class:opacity-0={i !== currentIndex}
-					onclick={() => openLightbox(i)}
-					tabindex={i === currentIndex ? 0 : -1}
-					aria-label="확대해서 보기"
-				>
-					<img
-						src={ss.src}
-						alt={ss.alt}
-						class="h-full w-full object-cover object-top"
-						loading="lazy"
-					/>
-				</button>
-			{/each}
+<div class="flex flex-col gap-10">
+	<!-- Header row -->
+	<div class="flex items-start justify-between">
+		<div class="flex flex-col gap-1">
+			<span class="text-xs font-mono text-muted-foreground tracking-widest uppercase">
+				{project.period}
+			</span>
+			<h2 class="text-3xl md:text-4xl font-semibold tracking-tight">{project.title}</h2>
+			<p class="text-muted-foreground text-base">{project.subtitle}</p>
+		</div>
+		<span class="text-4xl font-semibold text-muted-foreground/20 font-mono tabular-nums select-none">
+			{numberLabel}
+		</span>
+	</div>
 
-			<!-- Nav arrows -->
-			{#if project.screenshots.length > 1}
-				<button
-					onclick={(e) => { e.stopPropagation(); prev(); }}
-					class="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-1.5 text-white backdrop-blur-sm hover:bg-black/70 transition-colors"
-					aria-label="이전"
-				>
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-					</svg>
-				</button>
-				<button
-					onclick={(e) => { e.stopPropagation(); next(); }}
-					class="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-black/50 p-1.5 text-white backdrop-blur-sm hover:bg-black/70 transition-colors"
-					aria-label="다음"
-				>
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-					</svg>
-				</button>
+	<!-- Main screenshot + thumbnails -->
+	<div class="flex flex-col gap-3">
+		<button
+			type="button"
+			class="group w-full overflow-hidden rounded-xl ring-1 ring-border/60 hover:ring-border transition-all cursor-zoom-in"
+			onclick={() => openLightbox(activeIndex)}
+		>
+			<img
+				src={project.screenshots[activeIndex].src}
+				alt={project.screenshots[activeIndex].alt}
+				class="w-full object-cover block group-hover:scale-[1.01] transition-transform duration-500"
+				loading={index === 0 ? 'eager' : 'lazy'}
+			/>
+		</button>
 
-				<!-- Dots -->
-				<div class="absolute bottom-2 left-1/2 flex -translate-x-1/2 gap-1">
-					{#each project.screenshots as _, i}
-						<button
-							onclick={(e) => { e.stopPropagation(); currentIndex = i; }}
-							class={[
-								'h-1.5 rounded-full transition-all',
-								i === currentIndex ? 'w-4 bg-white' : 'w-1.5 bg-white/40'
-							].join(' ')}
-							aria-label={`스크린샷 ${i + 1}`}
-						/>
-					{/each}
+		{#if project.screenshots.length > 1}
+			<div class="flex gap-2 overflow-x-auto pb-0.5 scroll-smooth">
+				{#each project.screenshots as shot, idx}
+					<button
+						type="button"
+						class="flex-none w-14 h-9 rounded-md overflow-hidden ring-1 transition-all cursor-pointer {activeIndex === idx
+							? 'ring-foreground/60 opacity-100'
+							: 'ring-border/40 opacity-40 hover:opacity-70'}"
+						onclick={() => (activeIndex = idx)}
+					>
+						<img src={shot.src} alt={shot.alt} class="w-full h-full object-cover" />
+					</button>
+				{/each}
+			</div>
+		{/if}
+	</div>
+
+	<!-- Metrics + content -->
+	<div class="grid md:grid-cols-5 gap-8 md:gap-12">
+		<!-- Left: highlights -->
+		<div class="md:col-span-3 flex flex-col gap-4">
+			{#if project.id === 'stock-trading-ai'}
+				<div class="grid grid-cols-3 gap-3">
+					<div class="rounded-lg border border-border/60 bg-card p-3">
+						<p class="text-xs font-mono text-muted-foreground mb-1">OOS Sharpe</p>
+						<p class="text-xl font-semibold tabular-nums">3.716</p>
+					</div>
+					<div class="rounded-lg border border-border/60 bg-card p-3">
+						<p class="text-xs font-mono text-muted-foreground mb-1">Ann. Return</p>
+						<p class="text-xl font-semibold tabular-nums">+71.5%</p>
+					</div>
+					<div class="rounded-lg border border-border/60 bg-card p-3">
+						<p class="text-xs font-mono text-muted-foreground mb-1">SPY vs</p>
+						<p class="text-xl font-semibold tabular-nums">+11.7%</p>
+					</div>
 				</div>
 			{/if}
 
-			<!-- Counter -->
-			<div class="absolute right-2 top-2 rounded bg-black/50 px-2 py-0.5 text-xs text-white/70 backdrop-blur-sm tabular-nums">
-				{currentIndex + 1} / {project.screenshots.length}
+			<ul class="flex flex-col gap-2.5">
+				{#each project.highlights as h}
+					<li class="flex gap-3 text-sm leading-relaxed">
+						<span class="text-border mt-1 flex-none">—</span>
+						<span class="text-muted-foreground">{h}</span>
+					</li>
+				{/each}
+			</ul>
+		</div>
+
+		<!-- Right: description + tags -->
+		<div class="md:col-span-2 flex flex-col gap-5">
+			<p class="text-sm text-muted-foreground leading-relaxed">{project.description}</p>
+			<div class="flex flex-wrap gap-1.5">
+				{#each project.tags as tag}
+					<span
+						class="text-xs font-mono px-2 py-0.5 rounded-md border border-border/50 text-muted-foreground"
+					>
+						{tag}
+					</span>
+				{/each}
 			</div>
 		</div>
-
-		<!-- Content -->
-		<div class="flex flex-col p-6">
-			<CardHeader class="p-0 mb-4">
-				<div class="flex items-start justify-between gap-2">
-					<div>
-						<p class="text-muted-foreground mb-0.5 text-xs">{project.period}</p>
-						<h3 class="text-xl font-bold leading-tight">{project.title}</h3>
-						<p class="text-muted-foreground text-sm">{project.subtitle}</p>
-					</div>
-				</div>
-			</CardHeader>
-
-			<CardContent class="p-0 flex-1 flex flex-col gap-4">
-				<p class="text-sm leading-relaxed">{project.description}</p>
-
-				<ul class="space-y-1.5">
-					{#each project.highlights as h}
-						<li class="flex gap-2 text-sm">
-							<span class="text-muted-foreground mt-0.5 shrink-0">·</span>
-							<span>{h}</span>
-						</li>
-					{/each}
-				</ul>
-
-				<div class="mt-auto flex flex-wrap gap-1.5 pt-2">
-					{#each project.tags as tag}
-						<Badge variant="outline" class="text-xs">{tag}</Badge>
-					{/each}
-				</div>
-			</CardContent>
-		</div>
 	</div>
-</Card>
+</div>
 
 <!-- Lightbox -->
 {#if lightboxOpen}
 	<div
-		class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm"
-		onclick={closeLightbox}
+		class="fixed inset-0 z-[200] bg-black/96 flex items-center justify-center"
 		role="dialog"
 		aria-modal="true"
-		aria-label="스크린샷 확대 보기"
+		onclick={closeLightbox}
 	>
-		<!-- Close -->
-		<button
-			onclick={closeLightbox}
-			class="absolute right-4 top-4 rounded-full bg-white/10 p-2 text-white hover:bg-white/20 transition-colors"
-			aria-label="닫기"
-		>
-			<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-				<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-			</svg>
-		</button>
+		<!-- Top bar -->
+		<div class="absolute top-0 inset-x-0 h-12 flex items-center justify-between px-5 pointer-events-none">
+			<span class="text-xs font-mono text-white/30 pointer-events-auto">
+				{lightboxIndex + 1} / {project.screenshots.length}
+			</span>
+			<button
+				type="button"
+				class="text-xs font-mono text-white/40 hover:text-white/80 transition-colors pointer-events-auto"
+				onclick={closeLightbox}
+			>
+				ESC
+			</button>
+		</div>
 
-		<!-- Image -->
+		<!-- Image (stop propagation so clicking image doesn't close) -->
 		<div
-			class="relative mx-4 max-h-[90vh] max-w-6xl w-full"
+			class="max-w-[88vw] max-h-[82vh]"
 			onclick={(e) => e.stopPropagation()}
 			role="presentation"
 		>
 			<img
 				src={project.screenshots[lightboxIndex].src}
 				alt={project.screenshots[lightboxIndex].alt}
-				class="mx-auto max-h-[85vh] w-auto rounded-lg object-contain shadow-2xl"
+				class="max-w-[88vw] max-h-[82vh] object-contain rounded-lg shadow-2xl"
 			/>
-			<p class="mt-2 text-center text-sm text-white/50 tabular-nums">
-				{lightboxIndex + 1} / {project.screenshots.length}
-			</p>
 		</div>
 
-		<!-- Prev/Next -->
+		<!-- Prev / Next -->
 		{#if project.screenshots.length > 1}
 			<button
-				onclick={(e) => { e.stopPropagation(); lightboxPrev(); }}
-				class="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white hover:bg-white/20 transition-colors"
-				aria-label="이전"
+				type="button"
+				class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 text-white/60 hover:text-white transition-all"
+				onclick={(e) => { e.stopPropagation(); prev(); }}
 			>
-				<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-					<path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-				</svg>
+				‹
 			</button>
 			<button
-				onclick={(e) => { e.stopPropagation(); lightboxNext(); }}
-				class="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white hover:bg-white/20 transition-colors"
-				aria-label="다음"
+				type="button"
+				class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 text-white/60 hover:text-white transition-all"
+				onclick={(e) => { e.stopPropagation(); next(); }}
 			>
-				<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-					<path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-				</svg>
+				›
 			</button>
 		{/if}
+
+		<!-- Thumbnail strip -->
+		<div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5">
+			{#each project.screenshots as _, idx}
+				<button
+					type="button"
+					class="w-1.5 h-1.5 rounded-full transition-all {lightboxIndex === idx
+						? 'bg-white/80'
+						: 'bg-white/20 hover:bg-white/40'}"
+					onclick={(e) => { e.stopPropagation(); lightboxIndex = idx; }}
+				></button>
+			{/each}
+		</div>
 	</div>
 {/if}
