@@ -92,11 +92,10 @@
 					{#each project.screenshots as _, i}
 						<button
 							onclick={(e) => { e.stopPropagation(); currentIndex = i; }}
-							class="h-1.5 rounded-full transition-all"
-							class:w-4={i === currentIndex}
-							class:bg-white={i === currentIndex}
-							class:w-1.5={i !== currentIndex}
-							class:bg-white/40={i !== currentIndex}
+							class={[
+								'h-1.5 rounded-full transition-all',
+								i === currentIndex ? 'w-4 bg-white' : 'w-1.5 bg-white/40'
+							].join(' ')}
 							aria-label={`스크린샷 ${i + 1}`}
 						/>
 					{/each}
