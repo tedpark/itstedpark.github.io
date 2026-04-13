@@ -28,20 +28,21 @@ export const projects: Project[] = [
 		subtitle: 'Statistical Arbitrage System · SAC RL · Live on IBKR',
 		period: '2022 – Present',
 		description:
-			'A full-stack algorithmic trading system designed, built, and operated solo — from strategy research through live execution on IBKR. The central problem with most pair trading systems is regime dependency: strategies calibrated in trending markets collapse during mean-reverting periods. This system addresses it by combining HMM-based regime classification with SAC reinforcement learning for adaptive position sizing — the HMM detects market state in real time and routes signals to the appropriate strategy branch, while the SAC agent learns an entropy-maximizing policy that naturally shrinks exposure when signal confidence is low. The data pipeline ingests from FRED, yfinance, and Alpha Vantage into a DuckDB-backed feature store, drives an XGBoost / LightGBM / CatBoost ensemble plus a PyTorch TFT model for signal generation, and submits live orders to IBKR via ib-async. A Rust TUI and a Tauri 2 dekstop dashboard provide real-time visibility into signals, P&L, and position state.',
+			'A full-stack algorithmic trading system designed, built, and operated solo — from strategy research through live execution on IBKR. The central problem with most pair trading systems is regime dependency: strategies calibrated in trending markets collapse during mean-reverting periods. This system addresses it by combining HMM-based regime classification with SAC reinforcement learning for adaptive position sizing — the HMM detects market state in real time and routes signals to the appropriate strategy branch, while the SAC agent learns an entropy-maximizing policy that naturally shrinks exposure when signal confidence is low. The data pipeline ingests from FMP, FRED, yfinance, and Alpha Vantage into a DuckDB-backed feature store, normalizes and engineers features across multiple timeframes, then drives an XGBoost / LightGBM / CatBoost ensemble plus a PyTorch TFT model for signal generation. Live orders are submitted to IBKR via ib-async. A Rust TUI and a Tauri 2 desktop dashboard provide real-time visibility into signals, P&L, and position state.',
 		highlights: [
 			'OOS Sharpe 3.716 · Ann. Return +71.5% vs SPY benchmark +11.7%',
 			'HMM regime classifier feeds a strategy router — different signal logic per regime state',
 			'SAC RL position sizing: entropy-maximizing objective balances exploration vs exploitation',
 			'XGBoost + LightGBM + CatBoost ensemble with Optuna sweep; PyTorch TFT for sequence prediction',
-			'FastAPI service + DuckDB feature store + MongoDB ODM + Redis cache — purpose-fit per layer',
+			'Data pipeline: FMP + FRED + yfinance + Alpha Vantage → DuckDB feature store → multi-timeframe feature engineering → model training & inference',
+			'FastAPI service layer: MongoDB (Beanie ODM) for trade records, Redis for cache, DuckDB for analytical queries — each layer purpose-fit',
 			'Live execution on IBKR — 32 active stat-arb pairs, real-time order management and P&L tracking via ib_async',
 			'Rust TUI (Ratatui + Tokio) for terminal monitoring; Tauri 2 + SvelteKit desktop dashboard'
 		],
 		tags: [
 			'Python', 'PyTorch', 'SAC RL', 'HMM', 'XGBoost', 'LightGBM', 'CatBoost',
 			'TFT', 'Optuna', 'FastAPI', 'DuckDB', 'MongoDB', 'Redis',
-			'Docker', 'IBKR', 'Tauri 2', 'Rust', 'Ratatui', 'SvelteKit'
+			'FMP API', 'Docker', 'IBKR', 'Tauri 2', 'Rust', 'Ratatui', 'SvelteKit'
 		],
 		metrics: [
 			{ label: 'OOS Sharpe', value: '3.716' },
