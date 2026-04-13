@@ -25,18 +25,18 @@ export const projects: Project[] = [
 	{
 		id: 'stock-trading-ai',
 		title: 'Stock Trading AI',
-		subtitle: 'SAC RL 기반 StatArb 트레이딩 시스템',
-		period: '2022 ~ 현재',
+		subtitle: 'SAC RL-based Statistical Arbitrage Trading System',
+		period: '2022 – Present',
 		description:
-			'StatArb 전략 설계부터 AI 모델 학습, 백테스트 검증, 실매매 실행, 모니터링까지 전체 사이클을 혼자 구축·운용. 124,750개 조합에서 8단계 필터링으로 선별한 32개 페어를 IBKR로 실제 운용 중.',
+			'Built and operated the full cycle solo — from StatArb strategy design and AI model training, through backtesting, live execution, and real-time monitoring. Screened 124,750 pair combinations with an 8-stage filter pipeline and deployed the top 32 pairs live on IBKR.',
 		highlights: [
-			'OOS Sharpe 3.716, Ann +71.5% (vs SPY +11.7%)',
-			'HMM 레짐 분류 → 전략 분기로 레짐 전환 구간 성능 안정화',
-			'SAC RL 포지션 사이징 — 엔트로피 최대화 목적함수로 탐색-착취 균형',
-			'XGBoost + LightGBM + CatBoost 앙상블, Optuna 하이퍼파라미터 최적화',
-			'FastAPI + DuckDB + MongoDB + Redis 멀티 DB 아키텍처',
-			'IBKR ib-async 비동기 연동, Gateway Docker + autoheal 자동 복구',
-			'Tauri 2 데스크톱 대시보드 + Rust TUI 모니터링 툴 직접 구축'
+			'OOS Sharpe 3.716 · Ann. Return +71.5% vs SPY +11.7%',
+			'HMM regime classification → strategy branching for stable performance across regime transitions',
+			'SAC RL position sizing — entropy-maximizing objective for exploration-exploitation balance',
+			'XGBoost + LightGBM + CatBoost ensemble, Optuna hyperparameter optimization',
+			'FastAPI + DuckDB + MongoDB + Redis multi-DB architecture',
+			'IBKR ib-async integration, Gateway in Docker with autoheal auto-recovery',
+			'Tauri 2 desktop dashboard + Rust TUI monitoring tool — both built in-house'
 		],
 		tags: [
 			'Python', 'PyTorch', 'SAC RL', 'HMM', 'XGBoost', 'LightGBM', 'CatBoost',
@@ -56,15 +56,15 @@ export const projects: Project[] = [
 	{
 		id: 'readbooks-ai',
 		title: 'ReadBooks.ai',
-		subtitle: 'LLM 기반 PDF 번역 데스크톱 앱',
+		subtitle: 'LLM-powered PDF Translation Desktop App',
 		period: '2023',
 		description:
-			'영문 기술 서적을 문단별로 번역하는 Tauri 2 네이티브 앱. T5·fairseq로 직접 학습을 시도했다가 실패하고, Claude API 기반으로 재구현. 30개+ 언어 지원, SSE 스트리밍 Ask AI 기능 내장.',
+			'A Tauri 2 native app that translates technical books paragraph by paragraph. Attempted direct fine-tuning with T5 and fairseq — abandoned after Korean data shortage caused token noise — then rebuilt on Claude API. Ships with 30+ language support and an SSE-streamed Ask AI panel.',
 		highlights: [
-			'pdfjs-dist로 문단 단위 PDF 텍스트 추출',
-			'Rust 백엔드에서 Claude Haiku API 호출 → 30개+ 언어 번역',
-			'SSE 스트리밍으로 현재 페이지 컨텍스트 기반 Ask AI 구현',
-			'실패 경험: T5·fairseq 직접 학습 → 한국어 데이터 부족으로 토큰 나열 → Claude API로 전환'
+			'Paragraph-level PDF text extraction via pdfjs-dist',
+			'Rust backend calls Claude Haiku API → 30+ language output',
+			'SSE streaming for page-context-aware Ask AI',
+			'Honest failure: T5/fairseq fine-tune attempt failed → insufficient Korean data → pivoted to Claude API'
 		],
 		tags: ['Tauri 2', 'Rust', 'SvelteKit', 'TailwindCSS', 'Claude API', 'reqwest', 'tokio', 'pdfjs-dist'],
 		metrics: [
@@ -80,15 +80,15 @@ export const projects: Project[] = [
 	{
 		id: 'mandai',
 		title: 'Mandai',
-		subtitle: 'AI 코치 내장 목표 관리 데스크톱 앱',
+		subtitle: 'Goal Management Desktop App with Built-in AI Coach',
 		period: '2024',
 		description:
-			'만다라트 + GTD + 뽀모도로를 결합한 목표 관리 데스크톱 앱. 3D 깊이감 있는 UI로 목표의 계층 구조를 시각화하고, 현재 목표 컨텍스트를 AI에 전달해 실행 가이드를 받을 수 있는 Ask AI 기능 내장.',
+			'A Tauri 2 desktop app that unifies Mandala Chart, GTD, and Pomodoro into a single workflow. Visualizes goal hierarchy with a 3D depth UI and delivers execution guidance through an Ask AI feature that injects the current goal context into the prompt.',
 		highlights: [
-			'Tauri 2 Rust 백엔드 — DuckDB 데이터 저장, 뽀모도로 상태 관리',
-			'멀티 프로바이더: OpenAI · Anthropic · Gemini · Groq — 사용자가 직접 선택',
-			'SSE 스트리밍으로 GTD 전문가 역할 LLM Ask AI 구현',
-			'멀티 만다라트, GTD 상태 머신, 드릴다운 내비게이션'
+			'Tauri 2 Rust backend — DuckDB persistence, Pomodoro state management',
+			'Multi-provider: OpenAI · Anthropic · Gemini · Groq — user-selectable at runtime',
+			'SSE-streamed Ask AI with a GTD expert system prompt',
+			'Multi Mandala Chart support, GTD state machine, drill-down navigation'
 		],
 		tags: ['Tauri 2', 'Rust', 'SvelteKit', 'TailwindCSS', 'DuckDB', 'OpenAI', 'Claude', 'Gemini', 'Groq'],
 		metrics: [

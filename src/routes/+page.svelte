@@ -31,8 +31,8 @@
 		</h1>
 
 		<p class="text-foreground/60 text-lg leading-relaxed max-w-xl mb-10">
-			전략 설계 → 모델 학습 → 백테스트 → 실매매 → 모니터링.<br />
-			아이디어에서 프로덕션까지, 전 과정을 혼자 구축·운용합니다.
+			Strategy design → model training → backtesting → live execution → monitoring.<br />
+			Every stage, built and operated solo.
 		</p>
 
 		<!-- Stats strip -->

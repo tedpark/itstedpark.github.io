@@ -56,31 +56,38 @@
 
 	<!-- ② Screenshot -->
 	<div class="flex flex-col gap-3">
-		<button
-			type="button"
-			class="group w-full overflow-hidden rounded-2xl ring-1 ring-border/60 hover:ring-border/90 transition-all duration-300 cursor-zoom-in"
-			onclick={() => openLightbox(activeIndex)}
-		>
-			<img
-				src={project.screenshots[activeIndex].src}
-				alt={project.screenshots[activeIndex].alt}
-				class="w-full object-cover block group-hover:scale-[1.015] transition-transform duration-700 ease-out"
-				loading={index === 0 ? 'eager' : 'lazy'}
-			/>
-		</button>
+		<!-- 1px light border frame on dark bg -->
+		<div class="rounded-2xl p-px bg-foreground/[0.13]">
+			<button
+				type="button"
+				class="group w-full overflow-hidden rounded-[15px] hover:brightness-105 transition-all duration-300 cursor-zoom-in block"
+				onclick={() => openLightbox(activeIndex)}
+			>
+				<img
+					src={project.screenshots[activeIndex].src}
+					alt={project.screenshots[activeIndex].alt}
+					class="w-full object-cover block group-hover:scale-[1.015] transition-transform duration-700 ease-out"
+					loading={index === 0 ? 'eager' : 'lazy'}
+				/>
+			</button>
+		</div>
 
 		{#if project.screenshots.length > 1}
 			<div class="flex gap-2 overflow-x-auto py-0.5">
 				{#each project.screenshots as shot, idx}
-					<button
-						type="button"
-						class="flex-none w-16 h-10 rounded-lg overflow-hidden ring-1 transition-all duration-200 cursor-pointer {activeIndex === idx
-							? 'ring-foreground/50 opacity-100 scale-105'
-							: 'ring-border/30 opacity-35 hover:opacity-65 hover:ring-border/50'}"
-						onclick={() => (activeIndex = idx)}
-					>
-						<img src={shot.src} alt={shot.alt} class="w-full h-full object-cover" />
-					</button>
+					<div class="flex-none rounded-lg p-px transition-all duration-200 {activeIndex === idx
+						? 'bg-foreground/50'
+						: 'bg-foreground/[0.1] hover:bg-foreground/25'}">
+						<button
+							type="button"
+							class="w-16 h-10 rounded-[7px] overflow-hidden block cursor-pointer transition-all duration-200 {activeIndex === idx
+								? 'opacity-100 scale-105'
+								: 'opacity-40 hover:opacity-70'}"
+							onclick={() => (activeIndex = idx)}
+						>
+							<img src={shot.src} alt={shot.alt} class="w-full h-full object-cover" />
+						</button>
+					</div>
 				{/each}
 			</div>
 		{/if}
