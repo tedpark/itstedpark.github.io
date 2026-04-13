@@ -36,28 +36,28 @@
 
 <svelte:window onkeydown={handleKey} />
 
-<div class="flex flex-col gap-14">
+<div class="flex flex-col gap-12">
 
 	<!-- ① Identity -->
 	<div class="flex items-start gap-6">
-		<span class="text-[5.5rem] font-bold text-foreground/[0.05] font-mono tabular-nums leading-none select-none flex-none -mt-2">
+		<span class="text-[5rem] font-bold text-foreground/[0.07] font-mono tabular-nums leading-none select-none flex-none -mt-1">
 			{numberLabel}
 		</span>
 		<div class="flex flex-col gap-2 pt-1">
-			<span class="text-[11px] font-mono text-muted-foreground tracking-[0.25em] uppercase">
+			<span class="text-[11px] font-mono text-muted-foreground tracking-[0.28em] uppercase">
 				{project.period}
 			</span>
 			<h2 class="text-3xl md:text-[2.5rem] font-bold tracking-tight text-foreground leading-tight">
 				{project.title}
 			</h2>
-			<p class="text-base text-foreground/55">{project.subtitle}</p>
+			<p class="text-base text-foreground/60">{project.subtitle}</p>
 		</div>
 	</div>
 
 	<!-- ② Screenshot -->
 	<div class="flex flex-col gap-3">
-		<!-- 1px light border frame on dark bg -->
-		<div class="rounded-2xl p-px bg-foreground/[0.13]">
+		<!-- Main image with border frame -->
+		<div class="rounded-2xl p-px bg-white/[0.15]">
 			<button
 				type="button"
 				class="group w-full overflow-hidden rounded-[15px] hover:brightness-105 transition-all duration-300 cursor-zoom-in block"
@@ -72,17 +72,20 @@
 			</button>
 		</div>
 
+		<!-- Thumbnail tray -->
 		{#if project.screenshots.length > 1}
-			<div class="flex gap-2 overflow-x-auto py-0.5">
+			<div class="flex gap-2 overflow-x-auto rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2.5">
 				{#each project.screenshots as shot, idx}
-					<div class="flex-none rounded-lg p-px transition-all duration-200 {activeIndex === idx
-						? 'bg-foreground/50'
-						: 'bg-foreground/[0.1] hover:bg-foreground/25'}">
+					<div
+						class="flex-none rounded-[9px] p-px transition-all duration-200 {activeIndex === idx
+							? 'bg-white/60 shadow-[0_0_10px_rgba(255,255,255,0.12)]'
+							: 'bg-white/[0.07] hover:bg-white/20'}"
+					>
 						<button
 							type="button"
-							class="w-16 h-10 rounded-[7px] overflow-hidden block cursor-pointer transition-all duration-200 {activeIndex === idx
-								? 'opacity-100 scale-105'
-								: 'opacity-40 hover:opacity-70'}"
+							class="w-16 h-10 rounded-[8px] overflow-hidden block cursor-pointer transition-all duration-200 {activeIndex === idx
+								? 'opacity-100'
+								: 'opacity-35 hover:opacity-65'}"
 							onclick={() => (activeIndex = idx)}
 						>
 							<img src={shot.src} alt={shot.alt} class="w-full h-full object-cover" />
@@ -94,9 +97,9 @@
 	</div>
 
 	<!-- ③ Metrics -->
-	<div class="grid grid-cols-3 gap-px bg-border/40 rounded-xl overflow-hidden ring-1 ring-border/40">
+	<div class="grid grid-cols-3 gap-px bg-white/[0.07] rounded-xl overflow-hidden ring-1 ring-white/[0.07]">
 		{#each project.metrics as metric}
-			<div class="bg-card px-5 py-4 flex flex-col gap-1.5">
+			<div class="bg-[#141414] px-5 py-4 flex flex-col gap-1.5">
 				<p class="text-[11px] font-mono text-muted-foreground uppercase tracking-widest">{metric.label}</p>
 				<p class="text-2xl font-bold tabular-nums tracking-tight text-foreground">{metric.value}</p>
 			</div>
@@ -104,24 +107,24 @@
 	</div>
 
 	<!-- ④ Description -->
-	<p class="text-foreground/70 text-[17px] leading-[1.8] max-w-3xl">
+	<p class="text-foreground/75 text-[17px] leading-[1.85] max-w-3xl">
 		{project.description}
 	</p>
 
 	<!-- ⑤ Highlights -->
-	<div class="grid sm:grid-cols-2 gap-x-10 gap-y-3.5">
+	<div class="grid sm:grid-cols-2 gap-x-12 gap-y-4">
 		{#each project.highlights as h}
 			<div class="flex gap-3.5 items-start">
-				<span class="flex-none mt-[5px] w-1 h-1 rounded-full bg-foreground/30 ring-2 ring-foreground/10"></span>
-				<span class="text-sm text-foreground/65 leading-relaxed">{h}</span>
+				<span class="flex-none mt-[7px] w-[5px] h-[5px] rounded-full bg-foreground/40 ring-[3px] ring-foreground/[0.08]"></span>
+				<span class="text-sm text-foreground/72 leading-relaxed">{h}</span>
 			</div>
 		{/each}
 	</div>
 
 	<!-- ⑥ Stack -->
-	<div class="flex flex-wrap gap-1.5 pt-1 border-t border-border/40">
+	<div class="flex flex-wrap gap-1.5 pt-3 border-t border-white/[0.07]">
 		{#each project.tags as tag}
-			<span class="text-[11px] font-mono px-2.5 py-1 rounded-md bg-foreground/[0.05] text-foreground/50 hover:text-foreground/75 hover:bg-foreground/[0.08] transition-colors cursor-default">
+			<span class="text-[11px] font-mono px-2.5 py-[5px] rounded-md bg-white/[0.05] border border-white/[0.07] text-foreground/55 hover:text-foreground/80 hover:bg-white/[0.09] transition-colors cursor-default">
 				{tag}
 			</span>
 		{/each}
@@ -133,7 +136,7 @@
 <!-- Lightbox -->
 {#if lightboxOpen}
 	<div
-		class="fixed inset-0 z-[200] bg-black/95 flex items-center justify-center"
+		class="fixed inset-0 z-[200] bg-black/96 flex items-center justify-center"
 		role="dialog"
 		aria-modal="true"
 		onclick={closeLightbox}
@@ -141,7 +144,7 @@
 		<!-- Top bar -->
 		<div class="absolute top-0 inset-x-0 h-14 flex items-center justify-between px-6">
 			<div class="flex items-center gap-3">
-				<span class="text-xs font-mono text-white/25">{project.title}</span>
+				<span class="text-xs font-mono text-white/30">{project.title}</span>
 				<span class="text-white/15">·</span>
 				<span class="text-xs font-mono text-white/25 tabular-nums">
 					{lightboxIndex + 1} / {project.screenshots.length}
@@ -173,13 +176,13 @@
 		{#if project.screenshots.length > 1}
 			<button
 				type="button"
-				class="absolute left-5 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 text-white/50 hover:text-white text-xl transition-all"
+				class="absolute left-5 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center rounded-full bg-white/6 hover:bg-white/12 text-white/50 hover:text-white text-xl transition-all"
 				onclick={(e) => { e.stopPropagation(); prev(); }}
 				aria-label="Previous"
 			>‹</button>
 			<button
 				type="button"
-				class="absolute right-5 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 text-white/50 hover:text-white text-xl transition-all"
+				class="absolute right-5 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center rounded-full bg-white/6 hover:bg-white/12 text-white/50 hover:text-white text-xl transition-all"
 				onclick={(e) => { e.stopPropagation(); next(); }}
 				aria-label="Next"
 			>›</button>

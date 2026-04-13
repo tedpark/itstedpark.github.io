@@ -49,8 +49,17 @@
 
 	<!-- Projects -->
 	{#each projects as project, i}
-		<section class="border-t border-border/50">
-			<div class="max-w-5xl mx-auto px-6 py-20 md:py-28">
+		<section>
+			<!-- Labeled divider -->
+			<div class="max-w-5xl mx-auto px-6">
+				<div class="flex items-center gap-4 py-7 border-t border-white/[0.1]">
+					<span class="text-[10px] font-mono text-muted-foreground/50 tracking-[0.35em] uppercase whitespace-nowrap">
+						Project {['01', '02', '03'][i]}
+					</span>
+					<div class="h-px flex-1 bg-white/[0.06]"></div>
+				</div>
+			</div>
+			<div class="max-w-5xl mx-auto px-6 pb-24 md:pb-32">
 				<ProjectCard {project} index={i} />
 			</div>
 		</section>
