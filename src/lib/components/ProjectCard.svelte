@@ -36,44 +36,47 @@
 
 <svelte:window onkeydown={handleKey} />
 
-<div class="flex flex-col gap-10">
-	<!-- Header row -->
-	<div class="flex items-start justify-between">
-		<div class="flex flex-col gap-1">
-			<span class="text-xs font-mono text-muted-foreground tracking-widest uppercase">
-				{project.period}
-			</span>
-			<h2 class="text-3xl md:text-4xl font-semibold tracking-tight">{project.title}</h2>
-			<p class="text-muted-foreground text-base">{project.subtitle}</p>
-		</div>
-		<span class="text-4xl font-semibold text-muted-foreground/20 font-mono tabular-nums select-none">
+<div class="flex flex-col gap-14">
+
+	<!-- ① Identity -->
+	<div class="flex items-start gap-6">
+		<span class="text-[5.5rem] font-bold text-foreground/[0.05] font-mono tabular-nums leading-none select-none flex-none -mt-2">
 			{numberLabel}
 		</span>
+		<div class="flex flex-col gap-2 pt-1">
+			<span class="text-[11px] font-mono text-muted-foreground tracking-[0.25em] uppercase">
+				{project.period}
+			</span>
+			<h2 class="text-3xl md:text-[2.5rem] font-bold tracking-tight text-foreground leading-tight">
+				{project.title}
+			</h2>
+			<p class="text-base text-foreground/55">{project.subtitle}</p>
+		</div>
 	</div>
 
-	<!-- Main screenshot + thumbnails -->
+	<!-- ② Screenshot -->
 	<div class="flex flex-col gap-3">
 		<button
 			type="button"
-			class="group w-full overflow-hidden rounded-xl ring-1 ring-border/60 hover:ring-border transition-all cursor-zoom-in"
+			class="group w-full overflow-hidden rounded-2xl ring-1 ring-border/60 hover:ring-border/90 transition-all duration-300 cursor-zoom-in"
 			onclick={() => openLightbox(activeIndex)}
 		>
 			<img
 				src={project.screenshots[activeIndex].src}
 				alt={project.screenshots[activeIndex].alt}
-				class="w-full object-cover block group-hover:scale-[1.01] transition-transform duration-500"
+				class="w-full object-cover block group-hover:scale-[1.015] transition-transform duration-700 ease-out"
 				loading={index === 0 ? 'eager' : 'lazy'}
 			/>
 		</button>
 
 		{#if project.screenshots.length > 1}
-			<div class="flex gap-2 overflow-x-auto pb-0.5 scroll-smooth">
+			<div class="flex gap-2 overflow-x-auto py-0.5">
 				{#each project.screenshots as shot, idx}
 					<button
 						type="button"
-						class="flex-none w-14 h-9 rounded-md overflow-hidden ring-1 transition-all cursor-pointer {activeIndex === idx
-							? 'ring-foreground/60 opacity-100'
-							: 'ring-border/40 opacity-40 hover:opacity-70'}"
+						class="flex-none w-16 h-10 rounded-lg overflow-hidden ring-1 transition-all duration-200 cursor-pointer {activeIndex === idx
+							? 'ring-foreground/50 opacity-100 scale-105'
+							: 'ring-border/30 opacity-35 hover:opacity-65 hover:ring-border/50'}"
 						onclick={() => (activeIndex = idx)}
 					>
 						<img src={shot.src} alt={shot.alt} class="w-full h-full object-cover" />
@@ -83,85 +86,79 @@
 		{/if}
 	</div>
 
-	<!-- Metrics + content -->
-	<div class="grid md:grid-cols-5 gap-8 md:gap-12">
-		<!-- Left: highlights -->
-		<div class="md:col-span-3 flex flex-col gap-4">
-			{#if project.id === 'stock-trading-ai'}
-				<div class="grid grid-cols-3 gap-3">
-					<div class="rounded-lg border border-border/60 bg-card p-3">
-						<p class="text-xs font-mono text-muted-foreground mb-1">OOS Sharpe</p>
-						<p class="text-xl font-semibold tabular-nums">3.716</p>
-					</div>
-					<div class="rounded-lg border border-border/60 bg-card p-3">
-						<p class="text-xs font-mono text-muted-foreground mb-1">Ann. Return</p>
-						<p class="text-xl font-semibold tabular-nums">+71.5%</p>
-					</div>
-					<div class="rounded-lg border border-border/60 bg-card p-3">
-						<p class="text-xs font-mono text-muted-foreground mb-1">SPY vs</p>
-						<p class="text-xl font-semibold tabular-nums">+11.7%</p>
-					</div>
-				</div>
-			{/if}
-
-			<ul class="flex flex-col gap-2.5">
-				{#each project.highlights as h}
-					<li class="flex gap-3 text-sm leading-relaxed">
-						<span class="text-border mt-1 flex-none">—</span>
-						<span class="text-muted-foreground">{h}</span>
-					</li>
-				{/each}
-			</ul>
-		</div>
-
-		<!-- Right: description + tags -->
-		<div class="md:col-span-2 flex flex-col gap-5">
-			<p class="text-sm text-muted-foreground leading-relaxed">{project.description}</p>
-			<div class="flex flex-wrap gap-1.5">
-				{#each project.tags as tag}
-					<span
-						class="text-xs font-mono px-2 py-0.5 rounded-md border border-border/50 text-muted-foreground"
-					>
-						{tag}
-					</span>
-				{/each}
+	<!-- ③ Metrics -->
+	<div class="grid grid-cols-3 gap-px bg-border/40 rounded-xl overflow-hidden ring-1 ring-border/40">
+		{#each project.metrics as metric}
+			<div class="bg-card px-5 py-4 flex flex-col gap-1.5">
+				<p class="text-[11px] font-mono text-muted-foreground uppercase tracking-widest">{metric.label}</p>
+				<p class="text-2xl font-bold tabular-nums tracking-tight text-foreground">{metric.value}</p>
 			</div>
-		</div>
+		{/each}
 	</div>
+
+	<!-- ④ Description -->
+	<p class="text-foreground/70 text-[17px] leading-[1.8] max-w-3xl">
+		{project.description}
+	</p>
+
+	<!-- ⑤ Highlights -->
+	<div class="grid sm:grid-cols-2 gap-x-10 gap-y-3.5">
+		{#each project.highlights as h}
+			<div class="flex gap-3.5 items-start">
+				<span class="flex-none mt-[5px] w-1 h-1 rounded-full bg-foreground/30 ring-2 ring-foreground/10"></span>
+				<span class="text-sm text-foreground/65 leading-relaxed">{h}</span>
+			</div>
+		{/each}
+	</div>
+
+	<!-- ⑥ Stack -->
+	<div class="flex flex-wrap gap-1.5 pt-1 border-t border-border/40">
+		{#each project.tags as tag}
+			<span class="text-[11px] font-mono px-2.5 py-1 rounded-md bg-foreground/[0.05] text-foreground/50 hover:text-foreground/75 hover:bg-foreground/[0.08] transition-colors cursor-default">
+				{tag}
+			</span>
+		{/each}
+	</div>
+
 </div>
+
 
 <!-- Lightbox -->
 {#if lightboxOpen}
 	<div
-		class="fixed inset-0 z-[200] bg-black/96 flex items-center justify-center"
+		class="fixed inset-0 z-[200] bg-black/95 flex items-center justify-center"
 		role="dialog"
 		aria-modal="true"
 		onclick={closeLightbox}
 	>
 		<!-- Top bar -->
-		<div class="absolute top-0 inset-x-0 h-12 flex items-center justify-between px-5 pointer-events-none">
-			<span class="text-xs font-mono text-white/30 pointer-events-auto">
-				{lightboxIndex + 1} / {project.screenshots.length}
-			</span>
+		<div class="absolute top-0 inset-x-0 h-14 flex items-center justify-between px-6">
+			<div class="flex items-center gap-3">
+				<span class="text-xs font-mono text-white/25">{project.title}</span>
+				<span class="text-white/15">·</span>
+				<span class="text-xs font-mono text-white/25 tabular-nums">
+					{lightboxIndex + 1} / {project.screenshots.length}
+				</span>
+			</div>
 			<button
 				type="button"
-				class="text-xs font-mono text-white/40 hover:text-white/80 transition-colors pointer-events-auto"
+				class="text-[11px] font-mono text-white/30 hover:text-white/70 transition-colors tracking-widest uppercase"
 				onclick={closeLightbox}
 			>
-				ESC
+				Close
 			</button>
 		</div>
 
-		<!-- Image (stop propagation so clicking image doesn't close) -->
+		<!-- Image -->
 		<div
-			class="max-w-[88vw] max-h-[82vh]"
+			class="max-w-[90vw] max-h-[80vh]"
 			onclick={(e) => e.stopPropagation()}
 			role="presentation"
 		>
 			<img
 				src={project.screenshots[lightboxIndex].src}
 				alt={project.screenshots[lightboxIndex].alt}
-				class="max-w-[88vw] max-h-[82vh] object-contain rounded-lg shadow-2xl"
+				class="max-w-[90vw] max-h-[80vh] object-contain rounded-xl shadow-2xl"
 			/>
 		</div>
 
@@ -169,29 +166,28 @@
 		{#if project.screenshots.length > 1}
 			<button
 				type="button"
-				class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 text-white/60 hover:text-white transition-all"
+				class="absolute left-5 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 text-white/50 hover:text-white text-xl transition-all"
 				onclick={(e) => { e.stopPropagation(); prev(); }}
-			>
-				‹
-			</button>
+				aria-label="Previous"
+			>‹</button>
 			<button
 				type="button"
-				class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 text-white/60 hover:text-white transition-all"
+				class="absolute right-5 top-1/2 -translate-y-1/2 w-11 h-11 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 text-white/50 hover:text-white text-xl transition-all"
 				onclick={(e) => { e.stopPropagation(); next(); }}
-			>
-				›
-			</button>
+				aria-label="Next"
+			>›</button>
 		{/if}
 
-		<!-- Thumbnail strip -->
-		<div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5">
+		<!-- Dot strip -->
+		<div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
 			{#each project.screenshots as _, idx}
 				<button
 					type="button"
-					class="w-1.5 h-1.5 rounded-full transition-all {lightboxIndex === idx
-						? 'bg-white/80'
-						: 'bg-white/20 hover:bg-white/40'}"
+					class="transition-all duration-200 rounded-full {lightboxIndex === idx
+						? 'w-4 h-1.5 bg-white/80'
+						: 'w-1.5 h-1.5 bg-white/20 hover:bg-white/40'}"
 					onclick={(e) => { e.stopPropagation(); lightboxIndex = idx; }}
+					aria-label={`Screenshot ${idx + 1}`}
 				></button>
 			{/each}
 		</div>

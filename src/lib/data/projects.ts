@@ -3,6 +3,11 @@ export type Screenshot = {
 	alt: string;
 };
 
+export type Metric = {
+	label: string;
+	value: string;
+};
+
 export type Project = {
 	id: string;
 	title: string;
@@ -13,6 +18,7 @@ export type Project = {
 	screenshots: Screenshot[];
 	github?: string;
 	period: string;
+	metrics: Metric[];
 };
 
 export const projects: Project[] = [
@@ -37,6 +43,11 @@ export const projects: Project[] = [
 			'TFT', 'Optuna', 'FastAPI', 'DuckDB', 'MongoDB', 'Redis',
 			'Docker', 'IBKR', 'Tauri 2', 'Rust', 'Ratatui', 'SvelteKit'
 		],
+		metrics: [
+			{ label: 'OOS Sharpe', value: '3.716' },
+			{ label: 'Ann. Return', value: '+71.5%' },
+			{ label: 'Live Pairs', value: '32' }
+		],
 		screenshots: Array.from({ length: 11 }, (_, i) => ({
 			src: `/screenshots/trading/trading-${String(i + 1).padStart(2, '0')}.png`,
 			alt: `Stock Trading AI screenshot ${i + 1}`
@@ -56,6 +67,11 @@ export const projects: Project[] = [
 			'실패 경험: T5·fairseq 직접 학습 → 한국어 데이터 부족으로 토큰 나열 → Claude API로 전환'
 		],
 		tags: ['Tauri 2', 'Rust', 'SvelteKit', 'TailwindCSS', 'Claude API', 'reqwest', 'tokio', 'pdfjs-dist'],
+		metrics: [
+			{ label: 'Languages', value: '30+' },
+			{ label: 'LLM Backend', value: 'Claude' },
+			{ label: 'Platform', value: 'Native' }
+		],
 		screenshots: Array.from({ length: 5 }, (_, i) => ({
 			src: `/screenshots/readbooks/readbooks-${String(i + 1).padStart(2, '0')}.png`,
 			alt: `ReadBooks.ai screenshot ${i + 1}`
@@ -75,6 +91,11 @@ export const projects: Project[] = [
 			'멀티 만다라트, GTD 상태 머신, 드릴다운 내비게이션'
 		],
 		tags: ['Tauri 2', 'Rust', 'SvelteKit', 'TailwindCSS', 'DuckDB', 'OpenAI', 'Claude', 'Gemini', 'Groq'],
+		metrics: [
+			{ label: 'AI Providers', value: '4' },
+			{ label: 'Methodology', value: '3-in-1' },
+			{ label: 'Storage', value: 'Local-first' }
+		],
 		screenshots: Array.from({ length: 7 }, (_, i) => ({
 			src: `/screenshots/mandai/mandai-${String(i + 1).padStart(2, '0')}.png`,
 			alt: `Mandai screenshot ${i + 1}`
